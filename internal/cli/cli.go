@@ -15,11 +15,12 @@ type Executor interface {
 }
 
 var commands = map[string]Executor{
-	"serve": Serve{},
+	"serve":   &Serve{},
+	"adduser": &AddUser{},
 }
 
 // Run function reads flags and arguments, and then decides what to execute
-func Run(version string, buildDate string) {
+func Run(version, buildDate string) {
 	helpPtr := flag.Bool("help", false, "")
 	versionPtr := flag.Bool("version", false, "")
 
@@ -29,10 +30,17 @@ func Run(version string, buildDate string) {
    or: pfms -help
    or: pfms -version
 Options:
-      -help           Print usage
-      -version        Print version and build date
+      -help     Print usage
+      -version  Print version and build date
 Commands:
-       serve [port]   Start a server (default port `+DefaultPort+`)`, "\n")
+       serve [PORT]   
+                Start a server (default port `+DefaultPort+`)
+       adduser NAME PSWD TYPE [EMAIL]
+                Add a new user to the system. Arguments:
+                NAME  - nickname
+                PSWD  - password
+                TYPE  - 0(demo), 1(registered) or 2(admin)
+                EMAIL - user's email to reset a password`, "\n")
 	}
 
 	flag.Parse()
