@@ -11,10 +11,11 @@ var (
 	rdbx *sqlx.DB
 )
 
-// OpenConns opens a pool of connections to relational database
+// OpenConns opens a pool of connections to relational database.
+// It should be invoked before any call to database. Ideally, in main().
 func OpenConns() error {
 	var err error
-	rdbx, err = sqlx.Open("mysql", os.Getenv("MYSQL_URL"))
+	rdbx, err = sqlx.Open(os.Getenv("RDB_DRIVER"), os.Getenv("RDB_URL"))
 	if err != nil {
 		return err
 	}
