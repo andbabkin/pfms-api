@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"database/sql"
 	"fmt"
 	"strconv"
 
@@ -46,13 +47,17 @@ func (a *AddUser) Execute(args []string) error {
 	}
 
 	// insert a new user record
+	u := users.NewUser(name, string(hash), int8(utype))
+	if len(email) > 0 {
+		u.Email = sql.NullString{String: email, Valid: true}
+	}
 	repo := users.UserRepo{}
-	userID, err := repo.Create(name, string(hash), email, int8(utype), true)
+	err = repo.Create(u)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Created a new user with ID: %d\n", userID)
+	fmt.Printf("Created a new user with ID: %d\n", u.ID)
 
 	return nil
 }

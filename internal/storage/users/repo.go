@@ -1,8 +1,6 @@
 package users
 
 import (
-	"time"
-
 	"github.com/andbabkin/pfms-api/internal/storage"
 )
 
@@ -14,32 +12,20 @@ type IUserRepo interface {
 // UserRepo is an implementation of IUserRepo which connects to database
 type UserRepo struct{}
 
-// Create inserts a new record into users table and returns its ID if created
-func (r *UserRepo) Create(name, pswd, email string, role int8, active bool) (int64, error) {
+// Create inserts a new record into users table and sets ID in User model
+func (r *UserRepo) Create(u *User) error {
 	sqlstr := `INSERT INTO ` + UserTable + ` (name, pswd, role, email, active, created_at, updated_at)
 	VALUES (:name, :pswd, :role, :email, :active, :created_at, :updated_at)`
 
-	now := time.Now()
-	m := map[string]interface{}{
-		"name":       name,
-		"pswd":       pswd,
-		"role":       role,
-		"active":     active,
-		"created_at": now,
-		"updated_at": now,
-	}
-	if len(email) > 0 {
-		m["email"] = email
-	} else {
-		m["email"] = nil
+	result, err := storage.GetRDBx().NamedExec(sqlstr, u)
+	if err == nil {
+		id, _ := result.LastInsertId()
+		if id > 0 {
+			u.ID = uint64(id)
+		}
 	}
 
-	result, err := storage.GetRDBx().NamedExec(sqlstr, m)
-	if err != nil {
-		return 0, err
-	}
-
-	return result.LastInsertId()
+	return err
 }
 
 // UserRepoMock is an implementation of IUserRepo which provides mocked users data

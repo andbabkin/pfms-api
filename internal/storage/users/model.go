@@ -3,6 +3,8 @@ package users
 import (
 	"database/sql"
 	"time"
+
+	"github.com/andbabkin/pfms-api/internal/storage/base"
 )
 
 const (
@@ -12,14 +14,27 @@ const (
 
 // User model maps all fields from a record in "users" table
 type User struct {
-	ID        uint64
-	Name      string
-	Pswd      string
-	Token     sql.NullString
-	Role      int8
-	Email     sql.NullString
-	Active    bool
-	CreatedAt time.Time    `db:"created_at"`
-	UpdatedAt time.Time    `db:"updated_at"`
-	DeletedAt sql.NullTime `db:"deleted_at"`
+	base.AutoIncr
+	Name   string
+	Pswd   string
+	Token  sql.NullString
+	Role   int8
+	Email  sql.NullString
+	Active bool
+	base.Created
+	base.Updated
+	base.Deleted
+}
+
+// NewUser creates a new instance of active User
+func NewUser(name, pswd string, role int8) *User {
+	now := time.Now()
+	return &User{
+		Name:    name,
+		Pswd:    pswd,
+		Role:    role,
+		Active:  true,
+		Created: base.Created{CreatedAt: now},
+		Updated: base.Updated{UpdatedAt: now},
+	}
 }
