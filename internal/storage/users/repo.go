@@ -6,7 +6,7 @@ import (
 
 // IUserRepo is an interface to users data repository
 type IUserRepo interface {
-	Create(*User) (*User, error)
+	Create(*User) error
 }
 
 // UserRepo is an implementation of IUserRepo which connects to database
@@ -31,7 +31,7 @@ func (r *UserRepo) Create(u *User) error {
 // UserRepoMock is an implementation of IUserRepo which provides mocked users data
 type UserRepoMock struct{}
 
-// Create returns unchanged User struct given in argument
-func (r *UserRepoMock) Create(u *User) (*User, error) {
-	return u, nil
+// Create does nothing and returns nil
+func (r *UserRepoMock) Create(u *User) error {
+	return nil
 }
