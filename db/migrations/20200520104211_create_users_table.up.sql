@@ -2,7 +2,7 @@ CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `pswd` varchar(100) NOT NULL,
-  `token` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `token` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `role` tinyint(1) NOT NULL DEFAULT '0',
   `email` varchar(256) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',

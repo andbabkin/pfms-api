@@ -10,13 +10,15 @@ import (
 	"os/signal"
 	"strconv"
 	"time"
+
+	httpi "github.com/andbabkin/pfms-api/internal/http"
 )
 
 // Serve is a command which runs a server
 type Serve struct{}
 
 // Execute command
-func (s Serve) Execute(args []string) error {
+func (s *Serve) Execute(args []string) error {
 	port := DefaultPort
 	if len(args) > 0 {
 		_, err := strconv.ParseUint(args[0], 10, 32)
@@ -35,10 +37,7 @@ func (s Serve) Execute(args []string) error {
 
 func startHTTPSServer(addr string) {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-		w.Write([]byte("The server is healthy.\n"))
-	})
+	httpi.Handle(mux)
 	cfg := &tls.Config{
 		MinVersion:               tls.VersionTLS12,
 		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
