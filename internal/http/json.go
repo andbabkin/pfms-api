@@ -72,8 +72,7 @@ func DecodeJSONBody(w http.ResponseWriter, r *http.Request, out interface{}) boo
 
 // SendJSONResponse prepares JSON response from provided data
 func SendJSONResponse(w http.ResponseWriter, data interface{}) {
-	container := map[string]interface{}{"data": data}
-	b, err := json.Marshal(container)
+	b, err := json.Marshal(data)
 	if err != nil {
 		InternalServerError(w, err, "Failed to create JSON response")
 		return
