@@ -10,6 +10,7 @@ var validPath = regexp.MustCompile("^/([a-zA-Z0-9]+)(?:/([a-zA-Z0-9]+))?/?$")
 // Handle http server requests
 func Handle(mux *http.ServeMux) {
 	mux.HandleFunc("/auth/", makeHandler(AuthRouter))
+	mux.HandleFunc("/app/", makeHandler(AppRouter))
 }
 
 // makeHandler creates a function which makes common adjustments and checks then forwards control to specific handler
