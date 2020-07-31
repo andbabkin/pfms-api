@@ -21,6 +21,7 @@ type User struct {
 	Role   int8
 	Email  sql.NullString
 	Active bool
+	Lang   string
 	base.Created
 	base.Updated
 	base.Deleted
@@ -34,6 +35,7 @@ func NewUser(name, pswd string, role int8) *User {
 		Pswd:    pswd,
 		Role:    role,
 		Active:  true,
+		Lang:    "en",
 		Created: base.Created{CreatedAt: now},
 		Updated: base.Updated{UpdatedAt: now},
 	}
